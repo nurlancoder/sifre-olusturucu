@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .password-generator {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .password-generator h2 {
+            text-align: center;
+        }
+        .password-output {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        #password {
+            width: 80%;
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0f3460;
+            color: #fff;
+        }
+        .copy-btn {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background-color: #ff5370;
+        }
+        #length-input {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .options-wrapper {
+            margin: 20px 0;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+        }
+        .generate-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .generate-btn:hover {
+            background-color: #ff5370;
+        }
+    </style>
+</head>
+<body>
+    <div class="password-generator">
+        <h2>Password Generator</h2>
+        <div class="password-output">
+            <input type="text" id="password" readonly>
+            <button class="bi copy-btn" onclick="copyPassword()">Copy</button>
+        </div>
+        <label for="length-input">
+            Password length: <span class="length-val-box" id="length-val">12</span>
+        </label>
+        <input type="range" id="length-input" min="4" max="30" value="12" oninput="updateLength(this.value)">
+        <div class="options-wrapper">
+            <p>Advance Options</p>
+            <div class="options">
+                <label><input type="checkbox" id="lowercase" checked> Lowercase (a-z)</label>
+                <label><input type="checkbox" id="uppercase" checked> Uppercase (A-Z)</label>
+                <label><input type="checkbox" id="numbers" checked> Numbers (0-9)</label>
+                <label><input type="checkbox" id="special" checked> Special (@#$%...)</label>
+            </div>
+        </div>
+        <button class="generate-btn" onclick="generatePassword()">Generate Password</button>
+    </div>
+    <script>
+        function updateLength(value) {
+            document.getElementById('length-val').textContent = value;
+        }
+        function generatePassword() {
+            const length = document.getElementById('length-input').value;
+            const includeLower = document.getElementById('lowercase').checked;
+            const includeUpper = document.getElementById('uppercase').checked;
+            const includeNumbers = document.getElementById('numbers').checked;
+            const includeSpecial = document.getElementById('special').checked;
+            let charset = '';
+            if (includeLower) charset += 'abcdefghijklmnopqrstuvwxyz';
+            if (includeUpper) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (includeNumbers) charset += '0123456789';
+            if (includeSpecial) charset += '!@#$%^&*()_+[]{}|;:,.<>?';
+            if (charset === '') {
+                alert('Please select at least one character type!');
+                return;
+            }
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            document.getElementById('password').value = password;
+        }
+        function copyPassword() {
+            const passwordField = document.getElementById('password');
+            passwordField.select();
+            document.execCommand('copy');
+            alert('Password copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
